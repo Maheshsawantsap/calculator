@@ -1,0 +1,40 @@
+{
+  "name": "Calculator",
+  "version": "1.0.0",
+  "description": "A simple CAP project.",
+  "repository": "<Add your repository here>",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@sap/cds": "^7",
+    "@sap/cds-hana": "^2",
+    "@sap/xssec": "^3",
+    "bigdecimal": "^0.6.1",
+    "chai": "^4.3.10",
+    "chai-as-promised": "^7.1.1",
+    "chai-subset": "^1.6.0",
+    "decimal.js": "^10.4.3",
+    "express": "^4",
+    "jest": "^29.7.0",
+    "js-big-decimal": "^2.0.4",
+    "passport": "^0",
+    "supertest": "^6.3.3"
+  },
+  "devDependencies": {
+    "@cap-js/sqlite": "^1",
+    "@sap/cds-dk": "^7.4.1"
+  },
+  "scripts": {
+    "start": "cds-serve"
+  },
+  "cds": {
+    "requires": {
+      "db": {
+        "kind": "sqlite",
+        "credentials": {
+          "url": "db.sqlite"
+        }
+      }
+    }
+  }
+}
