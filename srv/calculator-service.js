@@ -1,59 +1,31 @@
 const bigdecimal = require('decimal.js');
-
-'use strict';
 const cds = require("@sap/cds");
  
 module.exports = cds.service.impl(async (srv) => {
-
-    const
-        {
-            Calculations
-        } = srv.entities;
-
-    srv.on('getCalculations', async (req)=>{
-        const calData = await getCalculationsRecords();
-        return calData;
-    })
-    srv.on("POST", [Calculations], async (req) => {
-        const { operator,value1, value2 } = req.data;
-
-       const result = await calculatorFun(operator,value1, value2);
-        console.log("post is working fine!");
-
-        const newCalculation = [{
-            operator,
-            value1,
-            value2,
-            result,
-        }];
-        if(result !== '') {
-            console.log('newCalculation -', newCalculation);
-            await INSERT.into(Calculations).entries(newCalculation);
-            console.log("post is working fine!",result);
-        }
-        return result;
+    const { calculations } = srv.entities;
+ 
+    srv.before("CREATE", [calculations], async (req) => {
+      const { input1, input2, operator } = req.data;
+      const result = await calculateResult( input1, input2, operator );
+      req.data.result = result;
+      console.log("Calculated result...");
+    });
+ 
+    const calculateResult = ( input1, input2, operator ) => {
+      const bd_input1 = new bigdecimal(input1);
+      const bd_input2 = new bigdecimal(input2);
+      let result = '';
+ 
+      if(operator === 'add' && typeof input1 === 'number' && typeof input2 === 'number' ) {
+        result = bd_input1.plus(bd_input2);
+      } else  if(operator === 'sub' && typeof input1 === 'number' && typeof input2 === 'number' ) {
+        result = bd_input1.minus(bd_input2);
+      } else  if(operator === 'divide' && typeof input1 === 'number' && typeof input2 === 'number' ) {
+        result = bd_input1.dividedBy(bd_input2);
+      } else {
+        result = 'Error: Unsupported oprator';
+      }
+      return result;
     }
-    );
-    const calculatorFun = (operator,value1,value2) => {
-        const num1 = new bigdecimal(value1);
-        const num2 = new bigdecimal(value2);
-        let result = '';
-        if(operator === 'add' && typeof value1 === 'number' && typeof value2 === 'number' ) {
-            result = num1.plus(num2);
-        } else  if(operator === 'sub' && typeof value1 === 'number' && typeof value2 === 'number' ) {
-            result = num1.minus(num2);
-        } else  if(operator === 'divide' && typeof value1 === 'number' && typeof value2 === 'number' ) {
-            result = num1.dividedBy(num2);
-        } else {
-            result = 'Error: Unsupported oprator';
-        }
-        return result;
-    }
-
-    const getCalculationsRecords = async () =>{
-        const calculations = await SELECT.from(Calculations);
-        return calculations;
-    }
-}
-)
+})
  

@@ -1,9 +1,9 @@
 namespace my.calculator;
-
-entity Calculations {
-  key ID : Integer;
-   value1 : Integer;
-   value2 : Integer;
+using { cuid } from '@sap/cds/common';
+entity calculations: cuid {
+   // key ID: Integer;
+   input1 : Integer;
+   input2 : Integer;
    operator: String;
    result  : Integer;
 }

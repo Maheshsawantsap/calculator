@@ -1,12 +1,14 @@
-POST http://localhost:4004/odata/v4/calculator/Calculations
+#############
+# Post request to pass the input and perform the calculations.
+POST http://localhost:4004/odata/v4/calculator/calculations
 Content-Type: application/json
-
-{"ID": 202,value1": 30,"value2": 2,"operator": "add"}
-
+ 
+{ "input1": 40, "input2": 5, "operator": "add" }
+ 
 #############
-# Get request
-GET http://localhost:4004/odata/v4/calculator/Calculations
-
+# Get request to list all the results.
+GET http://localhost:4004/odata/v4/calculator/calculations
+ 
 #############
-# Get request
-GET http://localhost:4004/odata/v4/calculator/Calculations(2)
+# Get request for a specific record
+GET http://localhost:4004/odata/v4/calculator/calculations(c51ed2e2-b3c9-474e-899a-be3e3f92a9d9)
